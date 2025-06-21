@@ -12,6 +12,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 
+// id column should look like "id SERIAL PRIMARY KEY,"
 const pool = new Pool({
   connectionString: "postgresql://" + role_name + ":" + role_password + "@localhost:5432/basics"
 });
@@ -26,8 +27,21 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get("/sign-up", (req, res) => res.render("sign-up-form"));
 
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
+app.get("/", async function(req, res) {
+  const items = await fetchItems();
+  if(items){
+    console.log('Items exists');
+    if(items[0]){
+      const name = items[0].name;
+      const price = items[0].price;
+      console.log(`Item name found: ${name}, Price: $${price}`);
+    } else {
+      console.log('Items 0 does not exist');
+    }
+  } else{
+    console.log('Items does not exist');
+  }
+  res.render("index", { user: req.user, items: items});
 });
 
 app.get("/log-out", (req, res, next) => {
@@ -42,7 +56,7 @@ app.get("/log-out", (req, res, next) => {
 app.post("/sign-up", async (req, res, next) => {
  try {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
-  await pool.query("insert into users (username, password) values ($1, $2)", [req.body.username, hashedPassword]);
+  await pool.query("insert into users (username, password, member) values ($1, $2, $3)", [req.body.username, hashedPassword, false]);
   res.redirect("/");
  } catch (error) {
     console.error(error);
@@ -59,6 +73,23 @@ app.post(
   })
 );
 
+// get items for index
+async function fetchItems(){
+  try{
+    const { rows } = await pool.query("SELECT * FROM items");
+    const items = rows;
+    if(items) {
+      const name = items[1].name;
+      const price = items[1].price;
+      console.log(`Item name found: ${name}, Price: $${price}`);
+      return items;
+    } else {
+      console.log('Item not found');
+    }
+  } catch(error) {
+    console.error('Error, cannot find items.');
+  }
+}
 
 // 3 functions below are important to create and maintain sessions
 passport.use(
