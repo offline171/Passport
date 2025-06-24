@@ -29,18 +29,6 @@ app.get("/sign-up", (req, res) => res.render("sign-up-form"));
 
 app.get("/", async function(req, res) {
   const items = await fetchItems();
-  if(items){
-    console.log('Items exists');
-    if(items[0]){
-      const name = items[0].name;
-      const price = items[0].price;
-      console.log(`Item name found: ${name}, Price: $${price}`);
-    } else {
-      console.log('Items 0 does not exist');
-    }
-  } else{
-    console.log('Items does not exist');
-  }
   res.render("index", { user: req.user, items: items});
 });
 
@@ -79,9 +67,6 @@ async function fetchItems(){
     const { rows } = await pool.query("SELECT * FROM items");
     const items = rows;
     if(items) {
-      const name = items[1].name;
-      const price = items[1].price;
-      console.log(`Item name found: ${name}, Price: $${price}`);
       return items;
     } else {
       console.log('Item not found');
