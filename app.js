@@ -1,9 +1,4 @@
 /////// app.js
-
-require('dotenv').config();
-const role_name = process.env.role_name;
-const role_password = process.env.role_password;
-
 const path = require("node:path");
 const { Pool } = require("pg");
 const express = require("express");
@@ -11,11 +6,10 @@ const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
-
+//custom requires
+const indexRouter = require("./routes/indexRouter");
+const pool = require("./db/pool");
 // id column should look like "id SERIAL PRIMARY KEY,"
-const pool = new Pool({
-  connectionString: "postgresql://" + role_name + ":" + role_password + "@localhost:5432/basics"
-});
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -26,11 +20,6 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/sign-up", (req, res) => res.render("sign-up-form"));
-
-app.get("/", async function(req, res) {
-  const items = await fetchItems();
-  res.render("index", { user: req.user, items: items});
-});
 
 app.get("/log-out", (req, res, next) => {
   req.logout((err) => {
@@ -52,7 +41,6 @@ app.post("/sign-up", async (req, res, next) => {
    }
 });
 
-
 app.post(
   "/log-in",
   passport.authenticate("local", {
@@ -60,6 +48,8 @@ app.post(
     failureRedirect: "/"
   })
 );
+
+app.use("/", indexRouter);
 
 // get items for index
 async function fetchItems(){
@@ -112,7 +102,5 @@ passport.deserializeUser(async (id, done) => {
     done(err);
   }
 });
-
-
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
