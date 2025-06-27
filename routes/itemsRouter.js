@@ -7,23 +7,23 @@ itemsRouter.get("/", async function(req,res){
 });
 
 itemsRouter.get("/:itemsId", async function(req,res){
-    const name = (await fetchItem(req.params.itemsId)).name;
-    res.send(`GET HTTP methed on item/${name} resource`);
+    const item = (await fetchItem(req.params.itemsId));
+    res.send(`GET HTTP methed on item/${item.name} resource`);
 });
 
 itemsRouter.put("/:itemsId", async function(req,res){
-    const name = (await fetchItem(req.params.itemsId)).name;
-    res.send(`PUT HTTP methed on item/${name} resource`);
+    const item = (await fetchItem(req.params.itemsId));
+    res.send(`PUT HTTP methed on item/${item.name} resource`);
 });
 
 itemsRouter.post("/:itemsId", async function(req,res){
-    const name = (await fetchItem(req.params.itemsId)).name;
-    res.send(`POST HTTP methed on item/${name} resource`);
+    const item = (await fetchItem(req.params.itemsId));
+    res.send(`POST HTTP methed on item/${item.name} resource`);
 });
 
 itemsRouter.delete("/:itemsId", async function(req,res){
-    const name = (await fetchItem(req.params.itemsId)).name;
-    res.send(`DELETE HTTP methed on item/${name} resource`);
+    const item = (await fetchItem(req.params.itemsId));
+    res.send(`DELETE HTTP methed on item/${item.name} resource`);
 });
 
 async function fetchItem(itemsId){
