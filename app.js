@@ -12,6 +12,7 @@ const signUpRouter = require("./routes/signUpRouter");
 const logOutRouter = require("./routes/logOutRouter");
 const logInRouter = require("./routes/logInRouter");
 const itemsRouter = require("./routes/itemsRouter");
+const cartRouter = require("./routes/cartRouter");
 const pool = require("./db/pool");
 // id column should look like "id SERIAL PRIMARY KEY,"
 
@@ -28,6 +29,7 @@ app.use("/log-in", logInRouter);
 app.use("/log-out", logOutRouter);
 app.use("/sign-up", signUpRouter);
 app.use("/items", itemsRouter);
+app.use("/cart", itemsRouter);
 app.use("/", indexRouter);
 
 // 3 functions below are important to create and maintain sessions
