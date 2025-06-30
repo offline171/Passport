@@ -3,22 +3,27 @@ const cartRouter = Router();
 const pool = require("../db/pool");
 
 cartRouter.get("/", async function(req,res){
-    res.send(`GET HTTP methed on cart item resource`);
-});
-
-cartRouter.get("/all", async function(req,res){
-    res.send(`GET HTTP methed on all cart items resource`);
-});
-
-cartRouter.get("/:userId", async function(req,res){
-    const cartItems = (await fetchUserCartItems(req.params.userId));
+  console.log('Help me');
+  const cartItems = (await fetchUserCartItems(req.params.userId));
   res.render("cart", { user: req.user, cartItems: cartItems});
 });
 
+cartRouter.get("/user", async function(req,res){
+    console.log('What is going on?');
+    res.send(`GET user info methed on user resource`);
+});
+
+cartRouter.get("/user/:userId", async function(req,res){
+  //const cartItems = (await fetchUserCartItems(req.params.userId));
+  //res.render("cart", { user: req.params.userId, cartItems: cartItems});  
+    res.send(`GET user info methed on user/${req.params.userId} resource`);
+});
+
 cartRouter.get("/:cartId", async function(req,res){
-    const cartItem = (await fetchCartItem(req.params.cartId));
-    const item = (await fetchItem(cartItem.itemId));
-    res.send(`GET HTTP methed on cart item/${item.name} resource`);
+    //const cartItem = (await fetchCartItem(req.params.cartId));
+    //const item = (await fetchItem(cartItem.itemId));
+    //res.send(`GET HTTP methed on cart item/${item.name} resource`); 
+    res.send(`GET user info methed on user/${req.params.cartId} resource`);
 });
 
 cartRouter.put("/:cartId", async function(req,res){
@@ -27,10 +32,14 @@ cartRouter.put("/:cartId", async function(req,res){
     res.send(`PUT HTTP methed on cart item/${item.name} resource`);
 });
 
-cartRouter.post("/:cartId", async function(req,res){
-    const cartItem = (await fetchCartItem(req.params.cartId));
-    const item = (await fetchItem(cartItem.itemId));
-    res.send(`POST HTTP methed on cart item/${item.name} resource`);
+cartRouter.post("/:userId/:cartId", async function(req,res,next){
+  try {
+    await pool.query("insert into cartitems (userId, itemId) values ($1, $2)", [req.params.userId, req.params.cartId]);
+    res.redirect("/cart");
+  } catch(error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 cartRouter.delete("/:cartId", async function(req,res){
