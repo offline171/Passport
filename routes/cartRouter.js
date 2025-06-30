@@ -6,6 +6,15 @@ cartRouter.get("/", async function(req,res){
     res.send(`GET HTTP methed on cart item resource`);
 });
 
+cartRouter.get("/all", async function(req,res){
+    res.send(`GET HTTP methed on all cart items resource`);
+});
+
+cartRouter.get("/:userId", async function(req,res){
+    const cartItems = (await fetchUserCartItems(req.params.userId));
+  res.render("cart", { user: req.user, cartItems: cartItems});
+});
+
 cartRouter.get("/:cartId", async function(req,res){
     const cartItem = (await fetchCartItem(req.params.cartId));
     const item = (await fetchItem(cartItem.itemId));
@@ -49,6 +58,21 @@ async function fetchItem(itemsId){
   try{
     const { rows } = await pool.query("SELECT * FROM items WHERE id = $1", [itemsId]);
     const items = rows[0];
+    if(items) {
+      return items;
+    } else {
+      console.log('Item not found');
+    }
+  } catch(error) {
+    console.error('Error, cannot find items.');
+  }
+}
+
+//also this one but it'd have to be a dedicated function somewhere else, probably in the db folder
+async function fetchUserCartItems(userId){
+  try{
+    const { rows } = await pool.query("SELECT * FROM cartitems WHERE userId = $1", [userId]);
+    const items = rows;
     if(items) {
       return items;
     } else {

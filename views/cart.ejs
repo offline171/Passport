@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping Cart</title>
+</head>
+<body>
+  <h1><%= user.username %>'s Shopping Cart</h1>
+  <h2>Your Items:</h2>
+  <ul>
+    <% for (var i = 0; i < cartItems.length ; i++) { %>
+        <li> <%= cartItems[i].id %>,  $<%= cartItems[i].userId %>,  $<%= cartItems[i].itemId %></li>
+    <% } %>
+  </ul>
+  <a href="/">HOME</a>
+</body>
+</html>
