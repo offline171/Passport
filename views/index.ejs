@@ -13,7 +13,8 @@
           <li> <%= items[i].name %>,  $<%= items[i].price %></li>
       <% } %>
     </ul>
-    <a href="/log-out">LOG OUT</a>
+    <a href="/log-out">LOG OUT</a><br>
+    <a href="/cart">CART</a>
   <% } else { %>
     <h1>Please Log In</h1>
     <form action="/log-in" method="POST">

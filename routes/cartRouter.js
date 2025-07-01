@@ -3,8 +3,7 @@ const cartRouter = Router();
 const pool = require("../db/pool");
 
 cartRouter.get("/", async function(req,res){
-  console.log('Help me');
-  const cartItems = (await fetchUserCartItems(req.params.userId));
+  const cartItems = (await fetchUserCartItems(req.user.id));
   res.render("cart", { user: req.user, cartItems: cartItems});
 });
 
@@ -14,9 +13,8 @@ cartRouter.get("/user", async function(req,res){
 });
 
 cartRouter.get("/user/:userId", async function(req,res){
-  //const cartItems = (await fetchUserCartItems(req.params.userId));
-  //res.render("cart", { user: req.params.userId, cartItems: cartItems});  
-    res.send(`GET user info methed on user/${req.params.userId} resource`);
+  const cartItems = (await fetchUserCartItems(req.params.userId));
+  res.render("cart", { user: req.params.userId, cartItems: cartItems});  
 });
 
 cartRouter.get("/:cartId", async function(req,res){
