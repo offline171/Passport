@@ -29,7 +29,7 @@ app.use("/log-in", logInRouter);
 app.use("/log-out", logOutRouter);
 app.use("/sign-up", signUpRouter);
 app.use("/items", itemsRouter);
-app.use("/cart", itemsRouter);
+app.use("/cart", cartRouter);
 app.use("/", indexRouter);
 
 // 3 functions below are important to create and maintain sessions
