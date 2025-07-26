@@ -14,7 +14,7 @@ FROM node:${NODE_VERSION}-alpine
 ENV NODE_ENV production
 
 
-WORKDIR /
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -38,4 +38,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the application.
-CMD node app.js
+CMD node /usr/src/app/app.js
