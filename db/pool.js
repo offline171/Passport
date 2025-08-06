@@ -1,8 +1,9 @@
 const { Pool } = require("pg");
 require('dotenv').config();
-const role_name = process.env.role_name;
-const role_password = process.env.role_password;
+const POSTGRES_USER = process.env.POSTGRES_USER;
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD;
+const POSTGRES_DB = process.env.POSTGRES_DB;
 
 module.exports = new Pool({
-  connectionString: "postgresql://postgres:mysecretpassword@db:5432/basics"
+  connectionString: "postgresql://" + POSTGRES_USER + ":" + POSTGRES_PASSWORD + "@db:5432/" + POSTGRES_DB
 });
