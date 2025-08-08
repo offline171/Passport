@@ -28,7 +28,7 @@ itemsRouter.delete("/:itemsId", async function(req,res){
 
 async function fetchItem(itemsId){
   try{
-    const { rows } = await pool.query("SELECT * FROM items WHERE id = $1", [itemsId]);
+    const { rows } = await pool.query("SELECT * FROM items WHERE item_id = $1", [itemsId]);
     const items = rows[0];
     if(items) {
       return items;
