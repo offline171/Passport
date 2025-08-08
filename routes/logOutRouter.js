@@ -1,8 +1,9 @@
 const {Router} = require("express");
 const logOutRouter = Router();
 
-logOutRouter.get("/", (req, res, next) => {
-  req.logout((err) => {
+logOutRouter.get("/", (req, res) => {
+  console.log("logout being attempted");
+  req.logOut((err) => {
     if (err) {
       return next(err);
     }

@@ -3,7 +3,7 @@ const cartRouter = Router();
 const pool = require("../db/pool");
 
 cartRouter.get("/", async function(req,res){
-  const cartItems = (await fetchUserCartItems(req.user.id));
+  const cartItems = (await fetchUserCartItems(req.user.user_id));
   res.render("cart", { user: req.user, cartItems: cartItems});
 });
 
@@ -17,14 +17,14 @@ cartRouter.get("/user/:userId", async function(req,res){
   res.render("cart", { user: req.params.userId, cartItems: cartItems});  
 });
 
-cartRouter.get("/:cartId", async function(req,res){
-    const cartItem = (await fetchCartItem(req.params.cartId));
+cartRouter.get("/:cart_id", async function(req,res){
+    const cartItem = (await fetchCartItem(req.params.cart_Id));
     const item = (await fetchItem(cartItem.itemid));
     res.send(`GET HTTP methed on cart item/${item.name} resource`); 
 });
 
-cartRouter.put("/:cartId", async function(req,res){
-    const cartItem = (await fetchCartItem(req.params.cartId));
+cartRouter.put("/:cart_id", async function(req,res){
+    const cartItem = (await fetchCartItem(req.params.cart_Id));
     const item = (await fetchItem(cartItem.itemid));
     res.send(`PUT HTTP methed on cart item/${item.name} resource`);
 });
@@ -39,15 +39,15 @@ cartRouter.post("/:userId/:itemId", async function(req,res,next){
   }
 });
 
-cartRouter.delete("/:cartId", async function(req,res){
-    const cartItem = (await fetchCartItem(req.params.cartId));
+cartRouter.delete("/:cart_id", async function(req,res){
+    const cartItem = (await fetchCartItem(req.params.cart_id));
     const item = (await fetchItem(cartItem.itemid));
     res.send(`DELETE HTTP methed on cart item/${item.name} resource`);
 });
 
 async function fetchCartItem(cartItemId){
   try{
-    const { rows } = await pool.query("SELECT * FROM cartitems WHERE id = $1", [cartItemId]);
+    const { rows } = await pool.query("SELECT * FROM cartitems WHERE cart_id = $1", [cartItemId]);
     const item = rows[0];
     if(item) {
       console.log('Cart item found');
@@ -64,7 +64,7 @@ async function fetchCartItem(cartItemId){
 async function fetchItem(itemId){
   console.log(`Item Id found to be /${itemId}`);
   try{
-    const { rows } = await pool.query("SELECT * FROM items WHERE id = $1", [itemId]);
+    const { rows } = await pool.query("SELECT * FROM items WHERE item_id = $1", [itemId]);
     const items = rows[0];
     if(items) {
       return items;
