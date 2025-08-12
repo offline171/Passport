@@ -9,7 +9,7 @@
   <h2>Your Items:</h2>
   <ul>
     <% for (var i = 0; i < cartItems.length ; i++) { %>
-        <li> <%= cartItems[i].cart_id %>,  user <%= cartItems[i].userid %>,  item <%= cartItems[i].itemid %></li>
+        <li> cart id: <%= cartItems[i].cart_id %>,  user id: <%= cartItems[i].userId %>,  item id: <%= cartItems[i].itemId %></li>
     <% } %>
   </ul>
   <a href="/">HOME</a>

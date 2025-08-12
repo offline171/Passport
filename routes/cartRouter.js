@@ -61,6 +61,21 @@ async function fetchCartItem(cartItemId){
 }
 
 //get this from export and require later
+async function fetchUserCartItems(userId){
+  try{
+    const { rows } = await pool.query("SELECT * FROM cartitems WHERE userId = $1", [userId]);
+    const items = rows;
+    if(items) {
+      return items;
+    } else {
+      console.log('Item not found');
+    }
+  } catch(error) {
+    console.error('Error, cannot find items.');
+  }
+}
+
+//also this one
 async function fetchItem(itemId){
   console.log(`Item Id found to be /${itemId}`);
   try{
@@ -76,19 +91,11 @@ async function fetchItem(itemId){
   }
 }
 
-//also this one but it'd have to be a dedicated function somewhere else, probably in the db folder
-async function fetchUserCartItems(userId){
-  try{
-    const { rows } = await pool.query("SELECT * FROM cartitems WHERE userId = $1", [userId]);
-    const items = rows;
-    if(items) {
-      return items;
-    } else {
-      console.log('Item not found');
-    }
-  } catch(error) {
-    console.error('Error, cannot find items.');
+async function fetchItems(items){
+  const cart = [];
+  for(i = 0; i < items.length; i++){
+    cart[i] = fetchItem(items[i].itemId);
   }
+  return cart;
 }
-
 module.exports = cartRouter;
